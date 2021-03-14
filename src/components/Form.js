@@ -3,11 +3,14 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import Card from './Card';
+
 // import Image from '../assets/background.jpeg';
 
 class Form extends React.Component{
     render(){
-        return (<div className="image">
+        return (<div>
+            <div className="image">
                 <div className="form">
                     <form >
                     <div style={{marginBottom:"2%"}}>
@@ -21,6 +24,8 @@ class Form extends React.Component{
                     </Button>
                     </form>
                 </div>
+        </div>
+            <Card />
         </div>)
     }
 }
