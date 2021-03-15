@@ -10,7 +10,7 @@ import Card from './Card';
 
 class Form extends React.Component{
 
-    state = {title:"", desc:"", data:[], edit:false, editIndex: 0};
+    state = {title:"", desc:"", data:[], edit:false, editIndex: 0, keyword:"", search:false, searchedData:[]};
 
     onSubmitForm = (e)=>{
         e.preventDefault();
@@ -20,7 +20,7 @@ class Form extends React.Component{
                     title: this.state.title,
                     desc: this.state.desc,
                 }
-                this.setState({data: [...this.state.data, formData], title:"", desc:"", edit:false});
+                this.setState({data: [...this.state.data, formData], title:"", desc:"", edit:false, search:false});
             }
         }else{
             let arr = [];
@@ -35,7 +35,7 @@ class Form extends React.Component{
                 arr.push(formData);
             }
         })
-        this.setState({data: arr, title:"", desc:"", edit:false});
+        this.setState({data: arr, title:"", desc:"", edit:false, search:false});
         }
     }
 
@@ -62,7 +62,23 @@ class Form extends React.Component{
                 arr.push(val);
             }
         })
-        this.setState({data: arr});
+        this.setState({data: arr, search:false});
+    }
+
+    // To Search by title
+    onSearch = (e)=>{
+        this.setState({search:true})
+        if(e.target.value !== ""){
+            let arr = [];
+            this.state.data.map((val)=>{
+                if(val.title == e.target.value){
+                    arr.push(val);
+                }
+            });
+            this.setState({searchedData: arr, search:true})
+        }else{
+            this.setState({search:false, keyword:"", searchedData:[]});
+        }
     }
 
     render(){
@@ -80,13 +96,25 @@ class Form extends React.Component{
                     <Button variant="contained" color="primary" className="btn" onClick={e=> this.onSubmitForm(e)} >
                         Submit
                     </Button>
+                    <div style={{marginTop:"4%"}}>
+                        <TextField  label="Search..." variant="outlined" className="title"  onChange={(e)=>this.onSearch(e)}  />
+                    </div>
                     </form>
                 </div>
         </div>
             <Grid container>
-                {this.state.data.map((val, index)=>{
+                {this.state.search == true ? 
+                this.state.searchedData.map((val, index)=>{
                     return <Card data={val} key={index} index={index} onDelete={this.onDelete} onEdit={this.onEdit}/> 
-                })}           
+                })
+                : 
+                this.state.data.map((val, index)=>{
+                    return <Card data={val} key={index} index={index} onDelete={this.onDelete} onEdit={this.onEdit}/> 
+                })
+                }
+                {/* {this.state.data.map((val, index)=>{
+                    return <Card data={val} key={index} index={index} onDelete={this.onDelete} onEdit={this.onEdit}/> 
+                })}            */}
             </Grid>
         </div>)
     }
